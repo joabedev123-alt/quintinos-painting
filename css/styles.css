@@ -183,6 +183,7 @@ p { margin: 0 0 1em; }
   z-index: 100;
   padding: 16px 24px 0;
   pointer-events: none;
+  overflow: visible;
 }
 
 .nav-shell {
@@ -201,14 +202,16 @@ p { margin: 0 0 1em; }
   box-shadow: var(--shadow);
 }
 
-.logo { display: flex; align-items: center; }
+.logo { display: flex; align-items: center; min-width: 0; }
 .logo img {
   height: 72px;
   width: auto;
+  max-width: none;
+  object-fit: contain;
   background: white;
 }
 
-.site-nav ul {
+.site-nav > ul {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -240,7 +243,7 @@ p { margin: 0 0 1em; }
   cursor: pointer;
 }
 
-.submenu {
+.site-nav .submenu {
   display: none;
   position: absolute;
   top: calc(100% + 16px);
@@ -271,11 +274,7 @@ p { margin: 0 0 1em; }
 
 .submenu a:hover { background: #f4f6fd; }
 
-@media (min-width: 981px) {
-  .has-sub:hover .submenu,
-  .has-sub:focus-within .submenu,
-  .has-sub.is-open .submenu { display: grid; }
-}
+.site-nav .has-sub.is-open > .submenu { display: grid; }
 
 .nav-ig, .nav-toggle {
   width: 46px;
@@ -294,6 +293,8 @@ p { margin: 0 0 1em; }
 }
 
 .nav-ig:hover { background: #26237a; color: white; }
+
+.nav-mobile-link { display: none; }
 
 .nav-toggle {
   display: none;
@@ -920,7 +921,12 @@ p { margin: 0 0 1em; }
   .nav-toggle { display: grid; justify-self: end; }
   .nav-ig { display: none; }
   .nav-shell { grid-template-columns: 1fr auto; min-height: 70px; border-radius: 28px; }
-  .logo img { height: 50px; }
+  .logo img {
+    height: auto;
+    width: min(248px, 66vw);
+    max-height: 84px;
+    object-fit: contain;
+  }
   .site-nav {
     display: none;
     position: absolute;
@@ -932,25 +938,24 @@ p { margin: 0 0 1em; }
     box-shadow: var(--shadow);
     padding: 10px;
   }
-  .site-nav.is-open { display: block; }
-  .site-nav ul { flex-direction: column; align-items: stretch; gap: 0; }
+  .site-nav.is-open { display: block; z-index: 30; }
+  .site-nav > ul { flex-direction: column; align-items: stretch; gap: 0; }
   .site-nav li a, .has-sub > a {
     display: flex;
     align-items: center;
-    min-height: 46px;
-    padding: 0 10px;
+    min-height: 48px;
+    padding: 0 12px;
   }
-  .has-sub { display: block; }
-  .sub-toggle { position: absolute; right: 6px; top: 6px; }
-  .submenu, .has-sub.is-open .submenu {
+  .has-sub { display: block; position: relative; }
+  .sub-toggle { position: absolute; right: 4px; top: 4px; width: 44px; height: 44px; }
+  .has-sub.is-open > .submenu {
     position: static;
     transform: none;
-    display: none;
     min-width: 0;
     box-shadow: none;
     padding: 0 0 8px 12px;
+    background: transparent;
   }
-  .has-sub.is-open .submenu { display: grid; }
   .about-grid, .vision-grid, .split, .contact-layout, .service-grid, .steps, .card-grid {
     grid-template-columns: 1fr;
     gap: 28px;

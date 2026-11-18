@@ -19,29 +19,41 @@
   syncOffset();
   window.addEventListener("resize", syncOffset);
 
+  function setToggleIcon(open) {
+    const icon = toggle.querySelector("i");
+    const label = toggle.querySelector(".sr-only");
+    if (icon) icon.className = open ? "bi bi-x-lg" : "bi bi-list";
+    if (label) label.textContent = open ? "Close menu" : "Open menu";
+  }
+
+  function closeServices() {
+    document.querySelectorAll(".has-sub.is-open").forEach((item) => {
+      item.classList.remove("is-open");
+      const button = item.querySelector(".sub-toggle");
+      if (button) button.setAttribute("aria-expanded", "false");
+    });
+  }
+
   function closeNav() {
     if (!nav || !toggle) return;
     nav.classList.remove("is-open");
     header.classList.remove("is-open");
     document.body.classList.remove("nav-open");
     toggle.setAttribute("aria-expanded", "false");
-    toggle.innerHTML = '<i class="bi bi-list" aria-hidden="true"></i><span class="sr-only">Open menu</span>';
+    setToggleIcon(false);
+    closeServices();
   }
 
   if (toggle && nav) {
-    toggle.addEventListener("click", () => {
+    toggle.addEventListener("click", (event) => {
+      event.preventDefault();
+      event.stopPropagation();
       const open = !nav.classList.contains("is-open");
       nav.classList.toggle("is-open", open);
       header.classList.toggle("is-open", open);
       document.body.classList.toggle("nav-open", open);
       toggle.setAttribute("aria-expanded", open ? "true" : "false");
-      toggle.innerHTML = open
-        ? '<i class="bi bi-x-lg" aria-hidden="true"></i><span class="sr-only">Close menu</span>'
-        : '<i class="bi bi-list" aria-hidden="true"></i><span class="sr-only">Open menu</span>';
-      if (open) {
-        const first = nav.querySelector("a");
-        if (first) first.focus();
-      }
+      setToggleIcon(open);
     });
 
     nav.querySelectorAll("a").forEach((link) => {
@@ -69,24 +81,12 @@
   });
 
   document.addEventListener("keydown", (event) => {
-    if (event.key === "Escape") {
-      closeNav();
-      document.querySelectorAll(".has-sub.is-open").forEach((item) => {
-        item.classList.remove("is-open");
-        const button = item.querySelector(".sub-toggle");
-        if (button) button.setAttribute("aria-expanded", "false");
-      });
-    }
+    if (event.key === "Escape") closeNav();
   });
 
   document.addEventListener("click", (event) => {
-    if (!event.target.closest(".has-sub")) {
-      document.querySelectorAll(".has-sub.is-open").forEach((item) => {
-        item.classList.remove("is-open");
-        const button = item.querySelector(".sub-toggle");
-        if (button) button.setAttribute("aria-expanded", "false");
-      });
-    }
+    if (event.target.closest(".nav-toggle")) return;
+    if (!event.target.closest(".has-sub")) closeServices();
     if (nav && toggle && nav.classList.contains("is-open") && !event.target.closest(".nav-shell") && !event.target.closest(".site-nav")) {
       closeNav();
     }
