@@ -920,11 +920,12 @@ p { margin: 0 0 1em; }
 @media (max-width: 980px) {
   .nav-toggle { display: grid; justify-self: end; }
   .nav-ig { display: none; }
-  .nav-shell { grid-template-columns: 1fr auto; min-height: 70px; border-radius: 28px; }
+  .nav-shell { grid-template-columns: minmax(0, 1fr) auto; min-height: 70px; border-radius: 28px; gap: 10px; }
   .logo img {
+    width: auto;
+    max-width: 100%;
     height: auto;
-    width: min(248px, 66vw);
-    max-height: 84px;
+    max-height: 72px;
     object-fit: contain;
   }
   .site-nav {
@@ -943,6 +944,7 @@ p { margin: 0 0 1em; }
   .site-nav li a, .has-sub > a {
     display: flex;
     align-items: center;
+    gap: 10px;
     min-height: 48px;
     padding: 0 12px;
   }
@@ -997,7 +999,15 @@ p { margin: 0 0 1em; }
   body.nav-open { overflow: hidden; }
   .nav-mobile-link { display: list-item; }
   .site-nav { max-height: min(70dvh, 560px); overflow: auto; -webkit-overflow-scrolling: touch; }
-  .site-header { padding-top: max(10px, env(safe-area-inset-top)); }
+  .site-header {
+    padding-top: max(10px, env(safe-area-inset-top));
+    padding-left: max(12px, env(safe-area-inset-left));
+    padding-right: max(12px, env(safe-area-inset-right));
+  }
+  .footer-mark { display: none; }
+  .form .btn, .footer-cta .btn-light { width: 100%; }
+  .footer li a { min-height: 44px; }
+  .form-grid > *, .footer-grid > *, .pills > *, .service-grid > *, .steps > * { min-width: 0; }
   .vision-photos { overflow: hidden; }
   .vision-photos::before { width: min(100%, 420px); }
   .vision-photos img { width: min(46%, 168px); }
